@@ -1,4 +1,6 @@
 
+#конфиг с настройками для расширений Flask
+
 CSRF_ENABLE = True                      #активирует предотвращение поддельных межсайтовых запросов
 SECRET_KEY = 'you-will-never-guess'     #используется для создания криптографического токена, который используется при валидации формы.
                                         # Когда вы пишете свое приложение, убедитесь,
@@ -16,5 +18,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' +os.path.join(basedir,'app.db') #SQLALCHEMY_DATABASE_URI необходим для расширения Flask-SQLAlchemy. Это путь к файлу с нашей базой данных.
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')    #SQLALCHEMY_MIGRATE_REPO — это папка, где мы будем хранить файлы SQLAlchemy-migrate
 
+# mail server settings
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
 
-#конфиг с настройками для расширений Flask
+# administrator list
+ADMINS = ['oleg.paukin@mail.ru']

@@ -6,6 +6,7 @@ from app.__init__ import oid
 from app.models import  User, ROLE_ADMIN, ROLE_USER
 from app.forms import LoginForm, EditForm
 
+@app.route('/')
 @app.route('/index', endpoint = 'index')       #декораторы route создают привязку адресов к этой функции
 @login_required
 def index():
@@ -75,6 +76,7 @@ def after_login(resp):                          #Аргумент resp, пере
         nickname = resp.nickname
         if nickname is None or nickname == "":
             nickname = resp.email.split('@')[0]
+        nickname = User.make_unique_nickname(nickname)      #создаем уникальный ник
         user = User(nickname = nickname, email = resp.email, role = ROLE_USER)
         db.session.add(user)
         db.session.commit()
@@ -151,5 +153,14 @@ def edit():
     else:
         form.nickname.data = g.user.nickname
         form.about_me.data = g.user.about_me
-        return render_template('edit.html',
+    return render_template('edit.html',
                                form=form)
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return  render_template('500.html'), 500
